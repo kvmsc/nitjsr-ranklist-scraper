@@ -21,7 +21,7 @@ def rollgen():
 		exit()
 	batch = str(input("Enter Your Batch:"))
 	head = batch+"UG"+branch
-	for i in range(1,101):
+	for i in range(1,91):
 		rolls.append(head+str(i//100) +(str(i//10)+str(i%10)))
 	return branch
 
@@ -40,7 +40,7 @@ def resultgen():
 	for roll in rolls:
 		"""Tries to open the website and exits when the site is down"""
 		try:
-			sleep(2)
+			#sleep(2)
 			driver.get("http://14.139.205.172/web_new/Default.aspx")
 		except:
 			print(" The Result Site is Down")
@@ -67,12 +67,18 @@ def resultgen():
 					driver.find_element_by_id('btnimgShowResult').click()
 					name = driver.find_element_by_id('lblStudentName').text
 					cgpa = driver.find_element_by_id('lblCPI').text
-					result.append({"name":name,"cgpa":cgpa,"roll":roll})
+					sgpa = driver.find_element_by_id('lblSPI').text
+					result.append({"name":name,"cgpa":cgpa,"sgpa":sgpa,"roll":roll})
 
 """This function Saves the scraped data to a csv file"""
 def printresult(branch):
-	"""Sorting the results scraped"""
-	finalranks=sorted(result,key=lambda k:k['cgpa'],reverse=(True))
+
+	"""Uncomment this to sort by cgpa"""
+	finalranks=sorted(result,key=lambda k:float(k['cgpa']),reverse=(True))
+	
+	"""Uncomment this to sort by sgpa"""
+	#finalranks=sorted(result,key=lambda k:float(k['sgpa']),reverse=(True))
+	
 	print()
 	i=1
 	for i in range(len(finalranks)):
